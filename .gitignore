@@ -1,0 +1,8 @@
+dataset/
+annotations/
+images/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env

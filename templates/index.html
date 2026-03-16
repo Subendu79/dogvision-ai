@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>DogVision AI</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🐶 DogVision AI</h1>
+<p class="subtitle">Identify dog breeds instantly using deep learning</p>
+
+<form id="uploadForm" method="POST" enctype="multipart/form-data">
+
+<div class="upload-area" id="uploadArea">
+<input type="file" name="image" id="fileInput" required>
+<p>Drag & Drop Dog Image<br>or Click to Upload</p>
+</div>
+
+<div class="preview" id="preview"></div>
+
+<button class="predict-btn">Predict Breed</button>
+
+</form>
+
+<div id="loading" class="loading hidden">
+<div class="spinner"></div>
+<p>AI analyzing image...</p>
+</div>
+
+
+{% if results %}
+
+<div class="results">
+
+<h2>Top Predictions</h2>
+
+{% for r in results %}
+
+<div class="prediction">
+
+<div class="breed-title">
+{{ r.breed }} ({{ r.confidence }}%)
+</div>
+
+<div class="bar">
+<div class="bar-fill" style="width:{{ r.confidence }}%"></div>
+</div>
+
+{% if r.info %}
+
+<img src="{{ r.info.img }}" class="breed-img">
+
+<p class="desc">{{ r.info.desc }}</p>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+</div>
+
+
+<script>
+
+const uploadArea = document.getElementById("uploadArea")
+const fileInput = document.getElementById("fileInput")
+const preview = document.getElementById("preview")
+const form = document.getElementById("uploadForm")
+const loading = document.getElementById("loading")
+
+uploadArea.addEventListener("click", () => fileInput.click())
+
+fileInput.addEventListener("change", function(){
+
+const file = this.files[0]
+
+if(file){
+
+const reader = new FileReader()
+
+reader.onload = function(e){
+preview.innerHTML = `<img src="${e.target.result}">`
+}
+
+reader.readAsDataURL(file)
+
+}
+
+})
+
+form.addEventListener("submit", function(){
+loading.classList.remove("hidden")
+})
+
+</script>
+
+</body>
+</html>
